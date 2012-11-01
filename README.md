@@ -31,7 +31,7 @@ Usage is just like a regular UploadField, but you make a ModifiedUploadField.
 1. Fixed the bug where the UploadField couldn't upload after refreshing the page
 2. Should now be able to upload images on a create new dataobject page without saving first
 
-Now that number 2 above only works has has_one (not many_many) relations and only with uploading (not attaching existing files yet).
+Note that number 2 above only works has has_one (not many_many) relations and only with uploading (not attaching existing files yet).
 
 
 
