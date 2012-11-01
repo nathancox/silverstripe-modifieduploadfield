@@ -26,22 +26,40 @@ class ModifiedUploadField extends UploadField {
 		$value = $this->value;
 		$fieldName = $this->getName();
 		
-		/*
-			TODO:
-				* many_many
-				* overwrites self with blank value
-						EITHER
-							have it insert the hidden field very time
-						OR
-							have a way to check if value was set before doing this
-								would need to tell difference between not set and 
-		*/
-		
 		if($record->has_one($fieldName)) {
 			$record->{$fieldName . 'ID'} = $value;
 		}
 		
 		return $this;
 	}
+	
+	public function managesRelation() {
+		$record = $this->getRecord();
+		
+		if ($record == null) {
+			$record = $this->getBlankRecordObject();
+		}
+		
+		$fieldName = $this->getName();
+		return (
+			$record 
+			&& ($record->has_one($fieldName) || $record->has_many($fieldName) || $record->many_many($fieldName))
+		);
+	}
+	
+	
+	function getBlankRecordObject() {
+		$controller = $this->form->Controller();
+		
+		if ($controller->class == 'GridFieldDetailForm_ItemRequest' || is_subclass_of($controller->class, 'RequestHandler')) {
+			$class = $controller->getGridField()->getModelClass();
+			$object = new $class();
+			return $object;
+		}
+		
+		return null;
+	}
+	
+
 	
 }
